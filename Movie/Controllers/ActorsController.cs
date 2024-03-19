@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Movie.Models;
 
 namespace Movie.Controllers
@@ -19,12 +20,17 @@ namespace Movie.Controllers
 		[Route("Create")]
 		public async Task<IActionResult> Create(Actors actors)
 		{
+			if (!ModelState.IsValid)
+			{
+             return BadRequest(ModelState);
+			}
 			_Context.Add(actors);
 			await _Context.SaveChangesAsync();
 
 
 			return Ok("Create");
 		}
+
 
 	}
 }
