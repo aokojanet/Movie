@@ -6,5 +6,6 @@
 		public string User { get; set; }
 		public DateTime DateCreated { get; set; }	
 		public Movies Movies { get; set; }
+		public int MoviesId { get; set; }
 	}
 }
