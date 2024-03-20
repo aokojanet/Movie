@@ -25,7 +25,7 @@ namespace Movie.Controllers
 			}
 			using (var context = _Context)
 			{
-				var Movies = await _Context.Movies.FirstOrDefaultAsync();
+				var Movies = await _Context.Movies.AddAsync(movies);
 			}
 			_Context.Add(movies);
 			await _Context.SaveChangesAsync();
@@ -94,7 +94,7 @@ namespace Movie.Controllers
 					return NotFound();
 				}
 
-				
+
 				_Context.Update(movie);
 				await _Context.SaveChangesAsync();
 
@@ -108,12 +108,58 @@ namespace Movie.Controllers
 			var movie = await _Context.Movies.FindAsync(id);
 			if (movie == null)
 			{
-				return NotFound($"Movie not found with id: {id}"); 
+				return NotFound($"Movie not found with id: {id}");
 			}
 
 			_Context.Remove(movie);
 			await _Context.SaveChangesAsync();
 			return Ok();
+		}
+		[HttpGet]
+		[Route("GetMovieActors")]
+		public async Task<IActionResult> GetMovieActors(int id)
+		{
+			using (var context = _Context)
+			{
+				if (id == 0)
+				{
+					return BadRequest();
+				}
+				var Actor = await _Context.Actors.FirstOrDefaultAsync();
+				if (Actor == null)
+				{
+					return NotFound();
+				}
+				return Ok();
+			}
+		}
+		[HttpGet]
+		[Route("GetActor")]
+		public async Task<IActionResult> GetActor(int Id)
+		{
+			using (var context = _Context)
+			{
+				var Actors = await _Context.Actors
+					  .Include(a => a.Movies)
+					  .Where(a => a.Id == a.Id).ToListAsync();
+				if (Actors == null)
+				{
+					return NotFound();
+				}
+				return Ok();
+
+			}
+		}
+		[HttpGet]
+		[Route("Details")]
+		public async Task<IActionResult> Details(int id)
+		{
+			var Movies = _Context.Movies.FirstOrDefault(m => m.Id == id);
+			if (Movies == null)
+			{
+				return NotFound();
+			}
+			return Ok(Movies);
 		}
 
 	}

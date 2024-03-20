@@ -30,7 +30,50 @@ namespace Movie.Controllers
 
 			return Ok("Create");
 		}
-
-
+		[HttpDelete]
+		[Route("DeleteActors")]
+		public async Task<IActionResult> DeleteActors(int id)
+		{
+			var Actors = _Context.Actors.FirstOrDefault(a => a.Id == id);
+			if (Actors == null)
+			{
+				return BadRequest();
+			}
+			_Context.Remove(Actors);
+			await _Context.SaveChangesAsync();
+			return Ok();
+		}
+		[HttpPost]
+		[Route("Update")]
+		public async Task<IActionResult> update(int id)
+		{
+			using (var context = _Context)
+			{
+				if (id == 0)
+				{
+					return NotFound();
+				}
+				var actor = _Context.Actors.FirstOrDefault(a => a.Id == id);	
+				if (actor == null)
+				{
+					return BadRequest();
+				}
+				_Context.Update(actor);
+				await _Context.SaveChangesAsync();
+				return Ok();
+			}
+		}
+		[HttpGet]
+		[Route("Details")]
+		public async Task<IActionResult> Details(int id)
+		{
+			var actors = _Context.Actors.FirstOrDefault(a => a.Id == id);
+			if (actors == null)
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
 	}
+	
 }

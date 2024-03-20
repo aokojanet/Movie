@@ -48,6 +48,30 @@ namespace Movie.Controllers
 
 			return Ok(category); 
 		}
+		[HttpDelete]
+		[Route("Delete")]
+		public async Task<IActionResult> Delete (int id)
+		{
+			var Category = _Context.Category.FirstOrDefault(c => c.Id == id);
+			if  (Category == null)
+			{
+				return BadRequest();
+			}
+			_Context.Remove(Category);
+			await _Context.SaveChangesAsync();
+			return Ok();
+		}
+		[HttpGet]
+		[Route("Details")]
+		public async Task<IActionResult> Details (int id )
+		{
+			var Category = _Context.Category.FirstOrDefault(c => c.Id == id);
+			if (Category == null)
+			{
+				return BadRequest();
+			}
+			return	Ok();
+		}
 	}
 
 }
