@@ -19,13 +19,13 @@ namespace Movie.Controllers
 		[Route("Create")]
 		public async Task<IActionResult> Create(Movies movies)
 		{
-			if (ModelState.IsValid)
+		   var Movies = new Movies();
 			{
-				return BadRequest(ModelState);
-			}
-			using (var context = _Context)
-			{
-				var Movies = await _Context.Movies.AddAsync(movies);
+				Movies.DateCreated = DateTime.Now;
+				Movies.DateModified = DateTime.Now;
+				Movies.DateOfRelease = DateTime.Now;
+				Movies.IsAvailable = true;
+				Movies.Name = Movies.Name;
 			}
 			_Context.Add(movies);
 			await _Context.SaveChangesAsync();
@@ -161,6 +161,22 @@ namespace Movie.Controllers
 			}
 			return Ok(Movies);
 		}
+		[HttpGet]
+		[Route("GetMoviesByActor")]
+		public async Task<IActionResult> GetMoviesByActor(int id)
 
+		{
+			using (var context = _Context)
+			{
+				var actors = _Context.Actors
+					.Include (a => a.Movies)
+					.FirstOrDefault(a => a.Id == id);
+				if (actors == null)
+				{
+					return NotFound();
+				}
+				return Ok(actors);
+			}
+		}
 	}
 }

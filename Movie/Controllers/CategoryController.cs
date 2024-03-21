@@ -14,6 +14,20 @@ namespace Movie.Controllers
 		{
 			_Context = context;
 		}
+		[HttpPost]
+		[Route("Create")]
+		public async Task<IActionResult> Create(Category category)
+		{
+			var Category = new Category();
+			{
+				Category.Name = Category.Name;
+				Category.DateCreated = DateTime.Now;
+				Category.DateModified = DateTime.Now;
+			}
+			_Context.Add(Category);
+			await _Context.SaveChangesAsync();
+			return Ok();
+		}
 		[HttpGet]
 		[Route("GetAllCategory")]
 		public async Task<IEnumerable<Category>> GetAllCategory(MovieDb movieDb)

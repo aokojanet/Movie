@@ -20,15 +20,17 @@ namespace Movie.Controllers
 		[Route("Create")]
 		public async Task<IActionResult> Create(Actors actors)
 		{
-			if (!ModelState.IsValid)
+			var Actors = new Actors();
 			{
-             return BadRequest(ModelState);
+				Actors.Name = actors.Name;
+				Actors.DateModified = DateTime.UtcNow;
+				Actors.DateCreated = DateTime.UtcNow;
 			}
 			_Context.Add(actors);
 			await _Context.SaveChangesAsync();
 
 
-			return Ok("Create");
+			return Ok();
 		}
 		[HttpDelete]
 		[Route("DeleteActors")]

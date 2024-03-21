@@ -1,4 +1,6 @@
-﻿namespace Movie.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Movie.Models
 {
 	public class Actors
 	{
@@ -7,6 +9,7 @@
 		public DateTime DateCreated { get; set; }
 		public DateTime DateModified { get; set; }
 		public bool IsAlive { get; set; }
-		public ICollection<Movies> Movies { get; set; }
+		[JsonIgnore]
+		public ICollection<Movies>? Movies { get; set; }
 	}
 }
