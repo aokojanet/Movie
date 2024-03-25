@@ -27,6 +27,10 @@ namespace Movie.Controllers
 				Movies.IsAvailable = true;
 				Movies.Name = Movies.Name;
 			}
+			if (movies == null)
+			{
+				return NotFound();
+			}
 			_Context.Add(movies);
 			await _Context.SaveChangesAsync();
 			return Ok();
