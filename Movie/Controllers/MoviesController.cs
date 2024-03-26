@@ -182,5 +182,20 @@ namespace Movie.Controllers
 				return Ok(actors);
 			}
 		}
+		[HttpGet]
+		[Route("GetMovieRating")]
+		public async Task<IActionResult> GetMovieRating(int movieId)
+		{
+			var movieRating = await _Context.Movies
+		   .Where(m => m.Id == movieId).ToListAsync();
+
+			if (movieRating == null)
+			{
+				return NotFound(); 
+			}
+
+			return Ok(movieRating);
+		}
+
 	}
 }
