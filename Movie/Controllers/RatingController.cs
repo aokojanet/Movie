@@ -7,23 +7,38 @@ namespace Movie.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	public class RatingController : ControllerBase
-	{ private readonly MovieDb _context;
-		public RatingController (MovieDb context)
+	{
+		private readonly MovieDb _context;
+		public RatingController(MovieDb context)
 		{
 			_context = context;
 		}
 		[HttpPost]
-		[Route("Create")]
-		public async Task<IActionResult> Create(Rating rating)
+
+		public async Task<IActionResult> RateMovie(int movieId, int ratingValue,int userId)
 		{
-			var Rating = new Rating();
+			if (movieId <= 0 || ratingValue < 1 || ratingValue > 5)
 			{
-				Rating.DateCreated = DateTime.Now;
-				Rating.User = rating.User;
+				return BadRequest("Invalid movie ID or rating value");
 			}
-			_context.Add(Rating);
+
+			var movie = await _context.Movies.FindAsync(movieId);
+			if (movie == null)
+			{
+				return NotFound("Movie not found");
+			}
+
+			var rating = new Rating
+			{
+				MoviesId = movieId,
+				UsersId = userId,
+				DateCreated = DateTime.Now,
+			};
+			await _context.Rating.AddAsync(rating);
 			await _context.SaveChangesAsync();
-			return Ok(Rating);
+
+			return Ok("Rating submitted successfully");
 		}
+
 	}
 }
